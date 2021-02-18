@@ -48,4 +48,6 @@ public interface StudentService {
     //Starts With Query
     List<Student> getAllStudentsByNameStartsWith(String name);
 
+    //Get Document By Reference Id
+    List<Student> getAllStudentsByDepartmentId(String deptId);
 }

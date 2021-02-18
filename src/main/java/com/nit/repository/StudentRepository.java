@@ -2,6 +2,7 @@ package com.nit.repository;
 
 import com.nit.entity.Student;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
 public interface StudentRepository extends MongoRepository<Student, String> {
 
     //This is the method proxy provided by the spring data. This will get ALl the Documents By Field name
-    //Native mongoDB query ..
+    //spring data mongoDB query ..
     List<Student> findByName(String name);
 
     //AND operator with multiple Fiields..spring data mongoDB query
@@ -30,5 +31,11 @@ public interface StudentRepository extends MongoRepository<Student, String> {
 
     //Starts With Query
     List<Student> findByNameStartsWith(String name);
+
+    List<Student> findByDepartmentId(String deptId);
+
+    //Native MOngoDB query
+    @Query("{ \"name\": \"?0\" }")
+    List<Student> getByName(String name);
 
 }

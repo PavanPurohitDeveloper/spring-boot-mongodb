@@ -1,7 +1,9 @@
 package com.nit.service.impl;
 
 import com.nit.entity.Student;
+import com.nit.repository.DepartmentRepository;
 import com.nit.repository.StudentRepository;
+import com.nit.repository.SubjectRepository;
 import com.nit.service.StudentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +21,33 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentRepository studentRepository;
 
+    @Autowired
+    private DepartmentRepository departmentRepository;
+
+    @Autowired
+    private SubjectRepository subjectRepository;
+
+    //This is for embedded documents directly we can save Student dcument
+    /*@Override
+    public Student createStudent(Student student) {
+        //student - this object we are getting from the Controller which comes in the Request Payload for http POST method.
+        log.info("Saving Student..{}", student.toString());
+        return studentRepository.save(student);
+    }*/
     @Override
     public Student createStudent(Student student) {
         //student - this object we are getting from the Controller which comes in the Request Payload for http POST method.
         log.info("Saving Student..{}", student.toString());
+        //First we will create the documents inside department and Subject collection before saving the Student document
+        //This will save document for department collection
+        if(student.getDepartment() != null){
+            departmentRepository.save(student.getDepartment());
+        }
+        //This will save all the documents that are coming in the request for subject collection.
+        if(student.getSubjects() != null && student.getSubjects().size() > 0){
+            //List of entities
+            subjectRepository.saveAll(student.getSubjects());
+        }
         return studentRepository.save(student);
     }
 
@@ -53,7 +78,8 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<Student> getAllStudentsByName(String name) {
         log.info("Retriving All the Documents from Student Collection By Name Field : {}", name);
-        return studentRepository.findByName(name);
+        //return studentRepository.findByName(name);
+        return studentRepository.getByName(name);
     }
 
     @Override
@@ -104,5 +130,10 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<Student> getAllStudentsByNameStartsWith(String name) {
         return studentRepository.findByNameStartsWith(name);
+    }
+
+    @Override
+    public List<Student> getAllStudentsByDepartmentId(String deptId) {
+        return studentRepository.findByDepartmentId(deptId);
     }
 }

@@ -1,6 +1,8 @@
 package com.nit.controller;
 
 import com.nit.entity.Student;
+import com.nit.repository.DepartmentRepository;
+import com.nit.repository.SubjectRepository;
 import com.nit.service.StudentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,13 @@ public class StudentController {
         log.debug("Creating a Student: {}", student);
         return studentService.createStudent(student);
     }
+
+    //This is for embedded documents directly we can save Student dcument
+    /*@RequestMapping(value = "/create", method = RequestMethod.POST)  // Or @PostMapping("/create")
+    public Student createStudent(@RequestBody Student student){
+        log.debug("Creating a Student: {}", student);
+        return studentService.createStudent(student);
+    }*/
 
     @GetMapping("/getById/{id}")
     public Student getStudentById(@PathVariable String id){
@@ -101,5 +110,10 @@ public class StudentController {
         return studentService.getAllStudentsByNameStartsWith(name);
     }
 
+    //Get Document By Reference Id
+    @GetMapping("/byDepartmentId")
+    public List<Student> getAllStudentsByDepartmentId(@RequestParam String deptId){
+        return studentService.getAllStudentsByDepartmentId(deptId);
+    }
 
 }
