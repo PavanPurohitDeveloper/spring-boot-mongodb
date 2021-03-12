@@ -1,0 +1,208 @@
+//request payload - creating document with reference
+{
+  "name": "Raj",	
+  "email": "raj@gmail.com",  
+  "department": {
+    "departmentName": "Computer Science",
+    "location": "INDIA"
+  },  
+  "subjects": [
+    {
+		"subjectName": "Java",
+		"marksObtained": 80
+	},
+	{
+		"subjectName": "C++",
+		"marksObtained": 70
+	}
+  ]
+}
+
+db.student.insert(
+{
+  "name": "Rohit",	
+  "email": "rohit@gmail.com",  
+  "department": {
+    "departmentName": "Computer Science",
+    "location": "INDIA"
+  },  
+  "subjects": [
+    {
+		"subjectName": "Java",
+		"marksObtained": 60
+	},
+	{
+		"subjectName": "C++",
+		"marksObtained": 70
+	}
+  ]
+}
+);
+
+db.student.insert(
+{
+  "name": "Pooja",	
+  "email": "pooja@gmail.com",  
+  "department": {
+    "departmentName": "Computer Science",
+    "location": "INDIA"
+  },  
+  "subjects": [
+    {
+		"subjectName": "Java",
+		"marksObtained": 60
+	},
+	{
+		"subjectName": "C++",
+		"marksObtained": 70
+	}
+  ]
+}
+);
+
+db.student.insert(
+{
+  "name": "Sachin",	
+  "email": "sachin@gmail.com",  
+  "department": {
+    "departmentName": "Computer Science",
+    "location": "INDIA"
+  },  
+  "subjects": [
+    {
+		"subjectName": "Java",
+		"marksObtained": 60
+	},
+	{
+		"subjectName": "C++",
+		"marksObtained": 70
+	}
+  ]
+}
+);
+
+db.student.insert(
+{
+  "name": "Anjaiha",	
+  "email": "anji@gmail.com",  
+  "department": {
+    "departmentName": "Computer Science",
+    "location": "INDIA"
+  },  
+  "subjects": [
+    {
+		"subjectName": "Java",
+		"marksObtained": 60
+	},
+	{
+		"subjectName": "C++",
+		"marksObtained": 70
+	}
+  ]
+}
+);
+
+db.student.insert(
+{
+  "name": "Jiya",	
+  "email": "jiya@gmail.com",  
+  "department": {
+    "departmentName": "Computer Science",
+    "location": "INDIA"
+  },  
+  "subjects": [
+    {
+		"subjectName": "Java",
+		"marksObtained": 60
+	},
+	{
+		"subjectName": "C++",
+		"marksObtained": 70
+	}
+  ]
+}
+);
+
+db.student.insert(
+{
+  "name": "Priya",	
+  "email": "priya@gmail.com",  
+  "department": {
+    "departmentName": "Computer Science",
+    "location": "INDIA"
+  },  
+  "subjects": [
+    {
+		"subjectName": "Java",
+		"marksObtained": 60
+	},
+	{
+		"subjectName": "C++",
+		"marksObtained": 70
+	}
+  ]
+}
+);
+
+db.student.insert(
+{
+  "name": "Shiva",	
+  "email": "shiva@gmail.com",  
+  "department": {
+    "departmentName": "Computer Science",
+    "location": "INDIA"
+  },  
+  "subjects": [
+    {
+		"subjectName": "Java",
+		"marksObtained": 60
+	},
+	{
+		"subjectName": "C++",
+		"marksObtained": 70
+	}
+  ]
+}
+);
+
+db.student.insert(
+{
+  "name": "Samuel",	
+  "email": "samuel@gmail.com",  
+  "department": {
+    "departmentName": "Computer Science",
+    "location": "INDIA"
+  },  
+  "subjects": [
+    {
+		"subjectName": "Java",
+		"marksObtained": 60
+	},
+	{
+		"subjectName": "C++",
+		"marksObtained": 70
+	}
+  ]
+}
+);
+
+db.student.insert(
+{
+  "name": "Shilpa",	
+  "email": "shilpa@gmail.com",  
+  "department": {
+    "departmentName": "Computer Science",
+    "location": "INDIA"
+  },  
+  "subjects": [
+    {
+		"subjectName": "Java",
+		"marksObtained": 60
+	},
+	{
+		"subjectName": "C++",
+		"marksObtained": 70
+	}
+  ]
+}
+);

@@ -1,0 +1,1211 @@
+MongoDB:
+==============
+github repo: https://github.com/PavanPurohitDeveloper/spring-boot-mongodb/branches
+
+### What is MongoDB ?
+------------------------
+-> MongoDB is document based NoSQL database.
+-> stores the data in the format of JSON like documents.
+	so underlying thing is It stores the data in the binary format of JSON ( which is called BSON).
+-> Very flexible structure to store the data. In MongoDB each record can have different number of fields.
+	so columns from SQL datbase is refered as field in mongoDB.
+-> It can handle very large amount of data.	
+
+NoSQL database - means document databse. data or records stored as documents. they use JSON syntax.
+
+-> MongoDB stores the data in the form of a document. 
+where each database has collections which in turn has documents. 
+Each document has a different number of fields, size, content, and is stored in a JSON-like format (i.e. Binary JSON (BSN)
+
+*** Collection are similar to tables in relational database.
+*** Document is nothing but data or record in a Table/Collection ( in a JSON format )
+
+It is very easy to scale compare to Relational database.
+Much faster in operations.
+
+	Relational database:
+	---------------------
+	MySQL
+	Postgress
+
+### difference between SQL Vs NoSQL ?
+---------------------------------------
+Lets consider in SQL database we have "Student" table and that is having relationship with "department" table 
+and also "subject" table iwth the help of foreignKey.
+we write JOINS queries to retrieve the data.. Joins are complex it will take sometime to execute queries.
+We have relationship with foreignKey.
+
+In NoSQL, All these details for "Student", "department"  and  "subject" are getting stored as a single record.
+There are no relationships.. thats why, no need to write JOINS queries.
+Execution of query is lot faster than the SQL database.
+relationships are not preferred.
+
+### MongoDB terms:
+-------------------
+SQL Structure for Student Table:  
+----------------------------------
+	Id   	name	date_of_birth		mail 	department_id
+	
+SQL Structure is foreign key referring to the "department" table.
+
+SQL													MongoDB
+-----										   		-----------
+we have "Database"						     		we have "Database"
+Inside Database we have "Table"						Inside Database we have "Collection".
+Each table has set of "Column"						Each Collection has some set of fields - "Field"
+Inside Table we have records i.e. Row				It is refered as "Document"
+we have Foreign Key to refer to the other table.	we have Sub Document (Reference) 
+														- Sub Document with reference
+														- Sub Document without reference
+
+Example: Student Collection
+-----------------------------
+- id
+- name
+- date_of_birth
+- department
+		- department_name
+		- location
+- subjects
+	- subject_name		- subject_name		
+	- marks_obtained	- marks_obtained
+
+here department is separate document
+Document Inside document is Sub document.
+subjects - here we can have Array of sub document.
+
+Example:
+{
+	"id": "1",
+	"name": "John",
+	"date_of_birth": "1990-01-14",
+	"department": {
+					"department_name": "Computer Science",
+					"location": "INDIA",
+				  },
+	"subjects": { [
+		{
+			"subject_name": "Computer Science",
+			"marks_obtained": 80				  
+		},
+		{
+			"subject_name": "Computer Science",
+			"marks_obtained": 85				  
+		}	
+	]					
+}
+
+### To start the mongodb server in local ?
+--------------------------------------------
+Go to directory - C:\Program Files\MongoDB\Server\4.4\bin
+> Run "mongod.exe" file.
+
+create 2 folders in C: drive..
+> data/db   ( C:\data\db) 
+
+we need to run one command for storage engine .. Go to command prompt from folder - C:\Program Files\MongoDB\Server\4.4\bin
+> mongod --storageEngine -mmapv1
+
+It should start on port 27017 by default..
+
+### Download Studio 3T for MongoDB
+-----------------------------------
+UI connector for MongoDB.. we can manage database, collection, documents, writing queries..
+similar to mySQL.
+
+root/root
+
+MongoDB documentation?
+-----------------------
+https://docs.mongodb.com/manual/reference/method/db.createUser/
+
+### How to go to Mongo Shell ?:
+---------------------------------
+C:\Program Files\MongoDB\Server\4.4\data\db --> This is where data will be stored in the filesystem
+
+Go to bin folder path - C:\Program Files\MongoDB\Server\4.4\bin>
+	mongod --directoryperdb --dbpath C:\Program Files\MongoDB\Server\4.4\data\db --logpath C:\Program Files\MongoDB\Server\4.4\log\mongo.log --logappend --rest --install
+
+> C:\Program Files\MongoDB\Server\
+> C:\Program Files\MongoDB\Server\4.4\bin>start mongo.exe
+
+-> we will be working with mongo shell..
+-> C:\Program Files\MongoDB\Server\4.4\bin> mongo
+	MongoDB shell version v4.4.3
+	connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+	Implicit session: session { "id" : UUID("f89105db-768c-404e-83c3-3525f7f31622") }
+	MongoDB server version: 4.4.3
+	
+> show dbs;
+	list all the databases present..
+	admin   0.000GB
+	config  0.000GB
+	local   0.000GB
+	
+### connection string for mongodb compass = mongodb://127.0.0.1:27017
+	
+### How to create a new database schema ? 
+-------------------------------------------
+By "use" keyword
+
+> use mycustomers --> it creates and switch to database.
+
+### what current database you are in ?
+----------------------------------------
+> db;
+
+### How to create a record ?
+-----------------------------
+when we working with document.. its just a JSON object or javascript object.
+{
+	field1:value1,
+	field2:value2,
+}
+we can have:
+ string fields,
+ arrays as a value, 
+ Objects as a value with curly braces {},
+ Arrays of Objects
+
+Example:
+{
+	first_name:"John"
+	last_name:"Doe"
+	memberships: ["mem1", "mem2"],
+	address:{
+		street:"4 main st",
+		city:"Boston",
+	},
+	contacts:[
+		{name:"Brad", relationship:"friend"},
+		{name:"Anji", relationship:"friend"},
+	]
+}
+
+### How to create a user ?
+---------------------------
+> db.createUser()
+
+> db.createUser( 
+	{
+	 user: "pavan",
+     pwd: "1234",
+     roles: [ "readWrite", "dbAdmin" ]
+	}
+);
+
+### what is Collection ?
+--------------------------
+Collection are similar to tables in relational database. its basically just hold the documents or records.
+> db.createCollection( <name of collection>)
+
+db.createCollection('customers');
+
+To see all the colletcions in database ?
+------------------------------------------
+> show collections
+
+### How to insert a document into that Collection ?
+----------------------------------------------------
+_id field - is primary key in mongodb. uniqe value for each and every document. so we uniquely identify the particular document.
+-> Each document can have different set of fields.
+
+> db.collection.insert()
+
+//insert single document
+db.customers.insert(
+	{
+		first_name:"John",
+		last_name:"Doe"
+	}
+);
+
+//whatever document you want, you can set new field like gender field for Joan.
+db.customers.insert( 
+	[ 
+		{first_name:"Steven", last_name:"Smith"},
+		{first_name:"Joan", last_name:"Johnson", gender:"female"}
+	]	
+);
+
+### to give the list of documents inside Collection ?
+-------------------------------------------------------
+> db.customers.find()
+{ "_id" : ObjectId("60218041cb88716197cdc774"), "first_name" : "John", "last_name" : "Doe" }
+
+_id field - is set to be ObjectId.. this is used as unique value to find the documents.
+
+here we dont have to worry about the creating an 'id' field, setting to auto increment, setting as primary key.
+these are all things you have to do in relataional databases.
+
+> db.customers.find();
+{ "_id" : ObjectId("60218041cb88716197cdc774"), "first_name" : "John", "last_name" : "Doe" }
+{ "_id" : ObjectId("602186e1cb88716197cdc775"), "first_name" : "Steven", "last_name" : "Smith" }
+{ "_id" : ObjectId("602186e1cb88716197cdc776"), "first_name" : "Joan", "last_name" : "Johnson", "gender" : "female" }
+
+//kind of helper function makes nice in output.
+> db.customers.find().pretty();
+	{
+			"_id" : ObjectId("60218041cb88716197cdc774"),
+			"first_name" : "John",
+			"last_name" : "Doe"
+	}
+	{
+			"_id" : ObjectId("602186e1cb88716197cdc775"),
+			"first_name" : "Steven",
+			"last_name" : "Smith"
+	}
+	{
+			"_id" : ObjectId("602186e1cb88716197cdc776"),
+			"first_name" : "Joan",
+			"last_name" : "Johnson",
+			"gender" : "female"
+	}
+
+### How to update the document inside Collection ?
+---------------------------------------------------
+> db.customers.update({Query parameter or find}, {Replacement document})
+
+> db.customers.update(
+	{first_name:"John"}, {first_name:"John", last_name:"Doe", gender:"male"}
+  );
+
+//For "first_name" : "Steven", "last_name" : "Smith" I want to update add a gender field, again I no need to add first_name and last_name fields.
+//$set: - keep previously whatever it is there in the document and add a new fields.
+> db.customers.update(
+	{first_name:"Steven"}, {$set:{gender:"male"}}
+  );
+  
+### we have an operator called "inc", which can increment numeric values for us.
+----------------------------------------------------------------------------------
+> db.customers.update(
+	{first_name:"Steven"}, {$set:{age:45}}
+  );
+//If I want increment value for age..
+> db.customers.update(
+	{first_name:"Steven"}, {$inc:{age:5}}
+  );
+
+### If I want to remove a field we have operator called "unset" ?
+-------------------------------------------------------------------
+> db.customers.update(
+	{first_name:"Steven"}, {$unset:{age:1}}
+);
+
+### Lets say u updating something which is not matching or not there ? What if we update a field that has no match
+---------------------------------------------------------------------------------------------------------------------
+> db.customers.update(
+	{first_name:"Mary"}, {first_name:"Mary", last_name:"Samson"}
+);
+-> result is 0 all across.
+
+### If this is not found, Insert it. you add an option called "upsert".
+------------------------------------------------------------------------
+> db.customers.update(
+	{first_name:"Mary"}, {first_name:"Mary", last_name:"Samson"}, {upsert:true}
+);
+
+> db.customers.update(
+	{first_name:"Steven"}, {first_name:"Steven", last_name:"Smith", gender:"male"}, {upsert:true}
+);
+
+### If I want to rename the fields for a document ?
+-----------------------------------------------------
+> db.customers.update(
+	{first_name:"Steven"}, {$rename:{"gender": "sex"}}
+);
+
+### How to remove document ?
+-------------------------------
+//It will delete all the customers with first_name matches 'Steven'..
+> db.customers.remove({first_name:"Steven"});
+
+//It will delete only one first find matching. //this line will remove only the first steven
+> db.customers.remove({first_name:"Steven"}, {justOne:true});
+
+### How to delete document by _id attribute?
+----------------------------------------------
+ > db.customers.remove({_id:ObjectId("602186e1cb88716197cdc775")});
+
+//Insert some more documents..
+db.customers.insert(
+	[
+		{
+			first_name:"Troy",
+			last_name:"Makons",
+			gender:"male",
+			age:33,
+			address:{
+				street:"432 Essex st",
+				city: "Lawerence",
+				state: "MA"
+			},
+			memberships:["mem1", "mem2"],
+			balance:125.23
+		},
+		{
+			first_name:"Beth",
+			last_name:"Jenkins",
+			gender:"female",
+			age:23,
+			address:{
+				street:"411 Blue st",
+				city: "Boston",
+				state: "MA"
+			},
+			memberships:["mem2", "mem3"],
+			balance:505.33
+		},
+		{
+			first_name:"Timothy",
+			last_name:"Wilkins",
+			gender:"male",
+			age:53,
+			address:{
+				street:"22 school st",
+				city: "Amesbury",
+				state: "MA"
+			},
+			memberships:["mem3", "mem4"],
+			balance:22.25
+		},
+		{
+			first_name:"William",
+			last_name:"Jackson",
+			gender:"male",
+			age:43,
+			address:{
+				street:"33 Gray st",
+				city: "Boston",
+				state: "MA"
+			},
+			memberships:["mem1", "mem2"],
+			balance:33.25
+		},
+		{
+			first_name:"Sharon",
+			last_name:"Thompson",
+			gender:"female",
+			age:35,
+			address:{
+				street:"19 Willis st",
+				city: "Worchester",
+				state: "MA"
+			},
+			memberships:["mem1", "mem2"],
+			balance:99.99
+		}
+	]
+);
+
+//query output
+BulkWriteResult({
+        "writeErrors" : [ ],
+        "writeConcernErrors" : [ ],
+        "nInserted" : 5,
+        "nUpserted" : 0,
+        "nMatched" : 0,
+        "nModified" : 0,
+        "nRemoved" : 0,
+        "upserted" : [ ]
+})
+
+### Lets say I want to find document All "Sharon" information whose first_name is "Sharon"..
+-----------------------------------------------------------------------------------------------
+> db.customers.find({first_name:"Sharon"});
+{ "_id" : ObjectId("6021f721cb88716197cdc77b"), "first_name" : "Sharon", "last_name" : "Thompson", "gender" : "female", "age" : 35, "address" : { "street" : "19 Willis st", "city" : "Worchester", "state" : "MA" }, "membderships" : [ "mem1", "mem2" ], "balance" : 99.99 }
+
+### Lets say I want to find documents All "Sharon" and "Troy" information whose first_name is "Sharon" and "Troy" ?
+--------------------------------------------------------------------------------------------------------------------
+> db.customers.find(
+		{$or:[{first_name:"Sharon"}, {first_name:"Troy"}]}
+	);
+	
+### find all documents by field name - lets say gender: male
+--------------------------------------------------------------
+> db.customers.find(
+		{gender:"male"}
+	);
+### I want to find everybody under the age of 40 ?
+--------------------------------------------------
+> db.customers.find(
+		{age:{$lt:40}}
+	);
+
+//less than or equal to
+> db.customers.find(
+		{age:{$lte:40}}
+	);	
+	
+### I want to find everybody greater than age of 40 ?
+-----------------------------------------------------
+> db.customers.find(
+		{age:{$gt:40}}
+	);
+
+//greater than or equal to
+> db.customers.find(
+		{age:{$gt:40}}
+	).pretty();		
+
+### Lets say I want to find everyone that lives in the city of Boston which is Object ...query using Object
+-----------------------------------------------------------------------------------------
+> db.customers.find(
+		{"address.city":"Boston"}
+	);
+
+//This will get compilation error..when you remove double quotes..
+db.customers.find(
+		{address.city: "Boston"}
+	);
+uncaught exception: SyntaxError: missing : after property id :
+@(shell):2:8
+
+### If I want to query memberships which is an array......query using Array
+-----------------------------------------------------------------------------
+> db.customers.find(
+		{membderships:"mem1"}
+	);
+
+### Sorting
+-------------
+//whatever field you want to sort by..If its 1 means sort in ascending order..
+> db.customers.find().sort({last_name:1});
+
+//to sort in descending order
+> db.customers.find().sort({last_name:-1}).pretty();
+
+### To count the documents ?
+------------------------------
+> db.customers.find().count();
+
+//count the documents based on field - gender:male
+> db.customers.find({gender:"male"}).count();
+
+//find everybody by setting limit ..limit to first 4 records..
+> db.customers.find().limit(4); 
+
+//combined limit and sort
+> db.customers.find().limit(4).sort({last_name:1}); 
+
+### using forEach() to iterate thru data
+------------------------------------------
+> db.customers.find().forEach(
+		function(doc){
+			print("Customer Name: "+doc.first_name)
+		}
+	);
+
+//function means a function
+//doc is a variable, you can use anything
+//after that is the body of the function
+//we are printing a statement and are iterating thru first_name's to see them all
+
+
+### Using Studio 3T for MongoDB
+-----------------------------------
+UI connector for MongoDB.. we can manage database, collection, documents, writing queries..
+similar to mySQL.
+
+Create Document for Collection
+--------------------------------
+_id field - is primary key in mongodb. uniqe value for each and every document. so we uniquely identify the particular document.
+
+{
+    "name": "Peter",
+     "mail": "peter@gmail.com",
+     "department" : {
+         "department_name": "Computer Science",
+         "location": "INDIA"
+     }
+}
+
+{
+    "name": "Steve",
+     "mail": "steve@gmail.com",
+     "subjects" : [
+     	{
+         "subject_name": "Java",
+         "marks_obtained": 70
+     	},
+     	{
+         "subject_name": "MongoDB",
+         "marks_obtained": 80
+     	}       
+     ] 
+}
+
+Using AND query and OR query:
+--------------------------------
+{
+    $and : [
+        {
+            "name": "Peter"
+        },
+        {
+            "mail": "peter@gmail.com"
+        }
+    ]
+}
+
+//OR query
+{
+    $or : [
+        {
+            "name": "eter"
+        },
+        {
+            "mail": "peter@gmail.com"
+        }
+    ]
+}
+
+Using IN query:
+----------------
+//define the field on which you want to query.. in the format of array.
+{
+   "name": {
+       $in : [
+           "John", "Peter"
+       ]   
+   }
+}
+
+### Update query Document:
+-----------------------------
+Using MongoDB shell version we write the queries to update document.
+using mongo.exe executable file for Mongo shell..
+
+In Update query -> Its not only just updating the values for existing fields only..
+					we can add the new fields for that particular document as well.
+
+update() -- It will just update one document at a time.
+updateOne() - It will just update one document at a time.
+
+synatx:
+db.student.update( 
+	{where condition}, 
+	{set condition}
+)
+
+//update the document where name is "John", set the mail.
+db.student.update(
+    {
+        "name": "John"    
+    },
+    {
+        $set : {
+            "mail" : "john@gmail.com"
+        }        
+    }
+);
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+//update the value for multiple fields..
+db.student.update(
+    {
+        "name": "Peter"    
+    },
+    {
+        $set : {
+            "mail" : "peter_1@gmail.com",
+            "name" : "Peter-1"
+        }        
+    }
+);
+
+### How to update multiple documents at a sametime.?
+--------------------------------------------------------
+> db.collection.updateMany()
+
+//update multiple documents at same time
+db.student.updateMany(
+    {
+        "name": "John"    
+    },
+    {
+        $set : {
+            "name" : "John-1"
+        }        
+    }
+);
+
+### How to delete all documents with same name ?
+-------------------------------------------------
+db.student.remove(
+	{
+		<where condition>
+	}
+)
+
+//delete all documents whose name is John-1
+db.student.remove(
+    {
+        "name": "John-1"    
+    }
+);
+
+### Find Query
+------------------
+//find all the documents whose name is John-1
+db.student.find(
+    {
+        "name": "John-1"    
+    }
+);
+
+### Running queries through Terminal
+---------------------------------------
+Go to folder where you hav eexecutable file mongo.exe ->  C:\Windows\System32\cmd.exe
+Open command prompt, type "mongo"
+
+C:\Program Files\MongoDB\Server\4.4\bin>mongo
+	MongoDB shell version v4.4.3
+	connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+	Implicit session: session { "id" : UUID("8b2c5122-4964-4071-8030-e2134f0f6c3a") }
+	MongoDB server version: 4.4.3
+
+//select and switch to database
+> use spring
+> Run queries..
+
+-> Use IntelliShell provided by Studio 3T..to run queries..
+
+MongoDB with Spring Boot:
+===========================
+Add the below dependency in pom.xml:  to us the MongoRepository for CRUD operations.
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-data-mongodb</artifactId>
+</dependency>
+		
+@Document(collection = "student") - This annotation provided by sping data mongodb..
+			This annotation tells the sping data mongodb, the Student.java class is not normal pojo class.
+			this is basically representing the Student collection that we have in mongoDB.
+	
+@Field(name = "mail")  // this is the field name we have inside Student collection in mongoDB
+private String email;   //If variable name and database field name not matching means then we should specify @Field annotation.
+
+
+
+### what is purpose of @PersitenceConstructor ?
+-------------------------------------------------
+-> whenever you have more than one constructor in class, which is representing collection, then we should define 
+@PersitenceConstructor for one constructor..
+Otherwise you face an error..
+
+@Getter
+@Setter
+@Document(collection = "student")
+public class Student {
+
+    @Id
+    private String id;
+
+    private String name;
+
+    @Field(name = "mail")
+    private String email;
+
+    private Department department;
+
+    private List<Subject> subjects;
+
+    public Student(String id, Department department) {
+        this.id = id;
+        this.department = department;
+    }
+
+    @PersistenceConstructor
+    public Student(String id, String name, String email, Department department, List<Subject> subjects) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.department = department;
+        this.subjects = subjects;
+    }
+}
+
+### Usage of MongoRepository ?
+--------------------------------
+MongoRepository -- provided by spring-data-mongodb
+For each class representing Collection, we will have repository so that we can write the queries for that particular collection.
+
+-> create an interface which extends MongoRepository< collection_entity_class, unique_identifier_of_collection >
+	MongoRepository<Student, String> 
+-> mark interafce with annotation as @Repository.
+
+@Repository
+public interface StudentRepository extends MongoRepository<Student, String> {
+
+}
+
+-> We have to enbale MongoRepositories (@EnableMongoRepositories() )in our main Application class.
+If we dont provide this annotation, it will not work in Spring Boot application.
+
+@SpringBootApplication
+@EnableMongoRepositories("com.nit.repository") // we have to specify package where the mongo repositories are located.
+public class SpringBootMongodbApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(SpringBootMongodbApplication.class, args);
+	}
+
+}
+
+### How to create Document using MongoRepository?
+---------------------------------------------------
+-> using save() method
+
+//Request payload
+db.student.insert(
+{
+  "name": "Raj",	
+  "email": "raj@gmail.com",  
+  "department": {
+    "departmentName": "Computer Science",
+    "location": "INDIA"
+  },  
+  "subjects": [
+    {
+		"subjectName": "Java",
+		"marksObtained": 80
+	},
+	{
+		"subjectName": "C++",
+		"marksObtained": 70
+	}
+  ]
+}
+);
+
+
+### How to find document by Id using MongoRepository ?
+--------------------------------------------------------
+-> for each document _id is unique..
+-> using findById() method -- will return the Optional Object for Student.
+
+	@Override
+    public Student getStudentById(String id) {
+        //Optional.get() method will return the Object which is holding.
+        return studentRepository.findById(id).get();
+    }
+	
+### Get All Documents For the Collection using MongoRepository ?
+-------------------------------------------------------------------
+-> using findAll() method ( MongoRepository provides) .. which returns List<>.
+
+	@Override
+    public List<Student> getAllStudents() {
+        log.info("Retriving All the Students from Collection..");
+        return studentRepository.findAll();
+    }
+	
+### How to Update Document using MongoRepository ?
+----------------------------------------------------
+-> using save() method from MongoRepository .. Internally it does 2 operations..
+	-> create the document
+	-> Update the Document.. it will return the updated Document Object.
+
+If you dont provide any value for unique identifier (i.e. id field in @Document entity class), It will create the document.
+But if we provide the value for this unique identifier for our document, then it will update the Document.
+
+//request payload..
+{
+  "id": "6029885daf6879553bc342e9"	
+  "name": "Raj-1",	
+  "email": "raj-1@gmail.com",  
+  "department": {
+    "departmentName": "Computer Science",
+    "location": "INDIA"
+  },  
+  "subjects": [
+    {
+		"subjectName": "Java",
+		"marksObtained": 80
+	},
+	{
+		"subjectName": "C++",
+		"marksObtained": 70
+	}
+  ]
+}
+
+### How to Delete Document using MongoRepository ?
+----------------------------------------------------
+-> using deleteById() method..
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/delete/{id}") //Or DeleteMapping("/delete/{id}")
+    public String deleteStudent(@PathVariable String id){
+        log.debug("Deleting the Document for Student Collection for StudentId: {}", id );
+        return studentService.deleteStudent(id);
+    }
+	
+	@Override
+    public String deleteStudent(String id) {
+        studentRepository.deleteById(id);
+        return "Student has been deleted.";
+    }
+
+### Get Document by Field using MongoRepository..
+-----------------------------------------------------
+I want to get All the Documents where the name field has value is "John-1"..
+using Native mongoDB query - findByName()method..
+
+Here we dont need to write the native query in mongoDB. So spring data provides method proxy..
+In that we just provide the correct method name that will create the Native mongoDB query and that will give us the results.
+
+	//Get All Documents By Field
+    @GetMapping(value = "/studentsByName/{name}")
+    public List<Student> getAllStudentsByName(@PathVariable String name){
+        log.debug("Retrieving all the Documents For the Collection from mongoDB..");
+        return studentService.getAllStudentsByName(name);
+    }
+	
+	@Override
+    public List<Student> getAllStudentsByName(String name) {
+        log.info("Retriving All the Documents from Student Collection By Name Field : {}", name);
+        return studentRepository.findByName(name);
+    }
+
+http://localhost:8102/api/student/studentsByName/John-1
+[
+  {
+    "id": "6026e7d435eba513d3c31d49",
+    "name": "John-1",
+    "email": "john@gmail.com",
+    "department": null,
+    "subjects": null
+  },
+  {
+    "id": "60275b1435eba513d3c31daa",
+    "name": "John-1",
+    "email": "john@gmail.com",
+    "department": null,
+    "subjects": null
+  }
+]
+
+### AND Operator with Multiple Fields.
+----------------------------------------
+I want to Get All the Documents where name field is John and email field..
+we pass the query parameters in URL itself..we will have 2 request parameters ( @RequestParam )..
+
+http://localhost:8102/api/student/studentsByNameAndMail/?email=john@gmail.com&name=John-1
+
+[
+  {
+    "id": "6026e7d435eba513d3c31d49",
+    "name": "John-1",
+    "email": "john@gmail.com",
+    "department": null,
+    "subjects": null
+  },
+  {
+    "id": "60275b1435eba513d3c31daa",
+    "name": "John-1",
+    "email": "john@gmail.com",
+    "department": null,
+    "subjects": null
+  }
+]
+
+### OR operator with multiple Fiields
+--------------------------------------
+Request URL:
+http://localhost:8102/api/student/studentsByNameOrMail?email=steve%40gmail.com&name=John-1
+
+In the name query parameter, we pass -> name=John
+In the email query parameter, we pass -> email=steve@gmail
+
+ //Get All Documents By Multiple Fields using OR operator
+    @GetMapping(value = "/studentsByNameOrMail")
+    public List<Student> getAllStudentsByNameOrMail(@RequestParam String name, @RequestParam String email){
+        log.debug("Retrieving all the Documents For the Collection from mongoDB..");
+        return studentService.getAllStudentsByNameOrMail(name, email);
+    }
+
+### what is Pagination ?
+---------------------------
+Lets say you have 1000s of records in the Collection.
+Now you cannot show all the records in one shot. 1000s of records in the UI frontend.. its time consuming..
+we will show only limited records and then we will apply the pagination..
+we just display 10 reocrds at a time, and we will provide pages 1, 2, 3 etc..
+whenever user clicks on next page, then another 10 records displays.
+
+-> There are 2 parameters: Skip and Limit
+Page No    Skip      Limit(Page Size)
+1			0			10 ( it will just give 10 records at a time from Collection) 
+2		    10			10   ( here skip = 10, means skip the first 10 records and get another next 10 records )
+3			20			10
+
+Skip -> means how many records you wnat to skip for this particular query and for this particular limit.
+		Skip is dynamic
+==> Skip = (Page No -1) * Page Size	
+
+Spring data mongo DB provides 'Pagable' interface.
+
+Pageable pageable = PageRequest.of(pageNo, pageSize); --> Page1 of 0 index, Page2 of 1st index..
+PageRequest.of() --> method is zero based page index, must not be negative
+
+	@GetMapping("/allWithPagination")
+    public List<Student> getAllStudentsWithPagination(@RequestParam int pageNo, @RequestParam int pageSize){
+        return studentService.getAllStudentsWithPagination(pageNo,pageSize );
+    }
+	
+	 @Override
+    public List<Student> getAllStudentsWithPagination(int pageNo, int pageSize) {
+        //Internall spring data mongoDB will do calcualtion.
+        //Skip = (Page No -1) * Page Size
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        // findAll(pageable) this returns Page of Student. Now convert to List<Student>
+        return studentRepository.findAll(pageable).getContent();
+    }
+test with API RequestURL: http://localhost:8102/api/student/allWithPagination?pageNo=1&pageSize=10
+
+### Sorting Documents 
+------------------------
+{"name":1} //sorted based on name field in ascending order
+{"name":-1} //sorted based on name field in descending order
+
+Spring data mongo DB provides 'Sort' class. by() is static method.
+
+	@GetMapping("/allWithSorting")
+    public List<Student> getAllStudentsWithSorting(){
+        return studentService.getAllStudentsWithSorting();
+    }
+	
+	@Override
+    public List<Student> getAllStudentsWithSorting() {
+        //based on which field you want to apply sort.
+        Sort sort = Sort.by(Sort.Direction.ASC, "name");
+
+        //If you want to sort based on multiple fields in Ascending order
+        //Sort sort = Sort.by(Sort.Direction.ASC, "name", "email");
+
+        return studentRepository.findAll(sort);
+    }
+
+### Get Documents by value of Sub Document field.
+---------------------------------------------------
+In mongoDB query..
+{
+	"department.department_name": "Computer Science"	
+}
+
+@Repository
+public interface StudentRepository extends MongoRepository<Student, String> {
+
+    //This is the method proxy provided by the spring data. This will get ALl the Documents By Field name
+    //Native mongoDB query
+    List<Student> findByName(String name);
+
+    //AND operator with multiple Fiields..spring data mongoDB query
+    List<Student> findByEmailAndName(String email, String name);
+
+    //OR operator with multiple Fiields
+    List<Student> findByNameOrEmail(String name, String email);
+
+    //Get All Documents by sub document field
+    List<Student> findByDepartmentDepartmentName(String deptName);
+}
+
+	//Get Documents by value of Sub Document field. Get the students by DepartmentName
+    @GetMapping("/byDepartmentName")
+    public List<Student> getAllStudentsByDepartmentName(@RequestParam String deptName){
+        return studentService.getAllStudentsByDepartmentName(deptName);
+    }
+	
+	@Override
+    public List<Student> getAllStudentsByDepartmentName(String deptName) {
+        return studentRepository.findByDepartmentDepartmentName(deptName);
+    }
+
+### Get Document By Array field.
+---------------------------------------
+Get all the documents whether the subject_name is Java..
+
+{
+    "subjects.subject_name": "Java"    
+}
+
+### Using LIKE Query
+-----------------------
+we need to provide backlash.. Get All documents whose mail starts with gmail...
+{
+    "mail": /gmail/
+}
+
+using spring data mongo DB:
+
+### Starts with Query:
+-----------------------
+Add carrot ^ symbol after backlash..
+
+{
+	"name": /^John/
+}
+
+@Repository
+public interface StudentRepository extends MongoRepository<Student, String> {
+
+    //This is the method proxy provided by the spring data. This will get ALl the Documents By Field name
+    //Native mongoDB query ..
+    List<Student> findByName(String name);
+
+    //AND operator with multiple Fiields..spring data mongoDB query
+    List<Student> findByEmailAndName(String email, String name);
+
+    //OR operator with multiple Fiields
+    List<Student> findByNameOrEmail(String name, String email);
+
+    //Get All Documents by sub document field
+    List<Student> findByDepartmentDepartmentName(String deptName);
+
+    //Get All Documents By Subject Name.
+    List<Student> findBySubjectsSubjectName(String subName);
+
+    //Like Query ..spring data mongoDB query
+    List<Student> findByEmailIsLike(String email);
+
+    //Starts With Query
+    List<Student> findByNameStartsWith(String name);
+
+}
+
+
+### @Transient Annotation From Spring Data.
+---------------------------------------------
+In the Student entity you want some fields dont want to save in Student Collection.
+Basically you want to ignore that field and its value while saving or updating the document.
+
+### Deployment To Pivotal Cloud Foundary(PCF):
+-----------------------------------------------
+-> It is an open source platform As A Service(PassS) provider
+-> We can deploy and rin Java, Php, .Net, Python applications.
+-> Creating Account on Pivotal Cloud Foundary
+-> Creating MongoDB on Cloud (mLab)
+-> Deploying Spring Boot App to Pivotal Cloud Foundary.
+
+> cf login
+API endpoint > https://api.run.pivotal.io
+> cf push <appln_name> <provide_path_where_our_jar_file_is_present>
+
+
+Understanding Relationships in MongoDB:
+----------------------------------------
+One table's primary key is there in another table as Foreign Key.
+
+Existing Structure:
+-------------------
+{ 
+    "_id" : ObjectId("602d898962caef50b8bc1da8"), 
+    "name" : "Rohit", 
+    "email" : "rohit@gmail.com", 
+    "department" : {
+        "departmentName" : "Computer Science", 
+        "location" : "INDIA"
+    }, 
+    "subjects" : [
+        {
+            "subjectName" : "Java", 
+            "marksObtained" : 60.0
+        }, 
+        {
+            "subjectName" : "C++", 
+            "marksObtained" : 70.0
+        }
+    ]
+}
+
+Create a department separate collection.
+Create a Subjects as separate collection.
+	Lets say we are getting 2 subjects in the request that we need to have inside particular Student document.
+	we will have 2 documents inside Subject with each respective id
+
+Student Collection with Relationship:
+--------------------------------------
+-id
+-name
+-date_of_birth
+-department
+	DBRef-department
+	id
+- Subjects
+	- DBRef - subject			- DBRef - subject
+	- id						- id
+	
+Each class is referring to collection	
+
+@DBRef -> this means that, this particular Entity class referring to separate collection in mongoDB.
+		when you relationship with different collections then we need to provide this annotation.
+		provided by spring data mongoDB - Student Entity/Collection is having relationship with Department and Subject entity class.
+		
+### What is Lazy Loading?
+---------------------------
+by default its false.
+
+When Lazy Loading is false:- 
+	Lets say we are getting One document from the Student collection. 
+	Basically we get One object of this Student Class.
+	Inside Student class we have relationship with Department and Subject collection.
+	If this Student document is having any reference sub document inside the department collection , then you will get 
+		that document as well. i.e. Object of department.
+    this is done automatically by spring data mongodb.
+	
+When Lazy Loading is true:-
+	you will not get reference documents from the subject collection, even if this particular student document is having any
+	reference sub documents from the Sujects collection you will not get this documents. List<Subject> returns null.
+	
+	@DBRef
+    private Department department;
+
+    @DBRef(lazy = true)
+    private List<Subject> subjects;
+
+### Create Document With Reference?
+-------------------------------------
+
+Here, Student collection has one-one relationship with department collection.
+	 and one-many relationship with subject colletcion.
+In Mongodb, whenever a particular collection is having relationship with other collections, 
+first we need to create the sub documents.
+Ex: Say, if you want to create the document for Student collection 
+		 then first we need to create the document for department collection.
+
+For each entity class, we need to have separate repository.		
+
+//request payload - creating document with reference
+{
+  "name": "Raj",	
+  "email": "raj@gmail.com",  
+  "department": {
+    "departmentName": "Computer Science",
+    "location": "INDIA"
+  },  
+  "subjects": [
+    {
+		"subjectName": "Java",
+		"marksObtained": 80
+	},
+	{
+		"subjectName": "C++",
+		"marksObtained": 70
+	}
+  ]
+}
+
+### Get Document By Reference Id
+-----------------------------------
+//this is embeded sub document query
+{
+	"department.department_name": "Computer Science"	
+}
+
+
+### Native MongoDB query with @Query annotation
+---------------------------------------------------
+{
+	"name": "Raj"
+}
+
